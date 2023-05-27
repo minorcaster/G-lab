@@ -17,10 +17,13 @@ module.exports = function getWifiName() {
       if (error || stderr) {
         reject(error || stderr);
       } else {
-        const match = stdout.match(/SSID: ([^\n]*)\n/);
+        const match = stdout.match(/SSID ([^\n]*)\n/);
+        console.log('WiFi Name:', match ? match[1] : 'Not found'); // Debug line
         if (match && match[1].includes('NOKOV')) {
+          console.log('WiFi name contains NOKOV'); // Debug line
           resolve(true);
         } else {
+          console.log('WiFi name does not contain NOKOV'); // Debug line
           resolve(false);
         }
       }
