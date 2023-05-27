@@ -1,0 +1,55 @@
+{
+  "name": "nokov-gpt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.minorcaster.chat",
+    "productName": "NOKOV GPT",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "icons/*",
+      "wifiName.js"
+    ],
+    "win": {
+      "icon": "icons/nokov-gpt-portrait.ico"
+    },
+    "mac": {
+      "icon": "icons/nokov-gpt-portrait.icns"
+    },
+    "linux": {
+      "icon": "icons/nokov-gpt-portrait.png"
+    },
+    "electronDownload": {
+      "version": "24.3.1",
+      "platform": "win32",
+      "arch": "x64",
+      "cache": "./electron-bin"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^24.3.1",
+    "electron-builder": "^23.6.0"
+  },
+  "dependencies": {
+    "async": "^3.2.4",
+    "binary-search-tree": "^0.2.6",
+    "esm": "^3.2.25",
+    "execa": "^7.1.1",
+    "mkdirp": "^3.0.1",
+    "nedb": "latest",
+    "underscore": "^1.13.6",
+    "wifi-name": "^3.1.1"
+  }
+}
