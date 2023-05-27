@@ -1,9 +1,9 @@
 const { app, BrowserWindow } = require('electron');
-const Datastore = require('nedb');
+const Datastore = require('nedb-promises');
 const path = require('path');
 const getWifiName = require('./wifiName');
 
-const db = new Datastore({
+const db = Datastore.create({
   filename: path.join(app.getPath('userData'), 'appData.db'),
   autoload: true
 });
@@ -12,35 +12,23 @@ let mainWindow = null;
 let splash = null;
 
 async function checkAccess() {
-  return new Promise((resolve, reject) => {
-    db.findOne({ key: 'access_code' }, async (err, doc) => {
-      if (err) {
-        reject(err);
+  try {
+    const doc = await db.findOne({ key: 'access_code' });
+    if (doc && doc.value === '11161219') {
+      return true;
+    } else {
+      const wifiName = await getWifiName();
+      if (wifiName.includes('NOKOV')) {
+        await db.update({ key: 'access_code' }, { $set: { value: '11161219' } }, {});
+        return true;
       } else {
-        if (doc && doc.value === '11161219') {
-          resolve(true);
-        } else {
-          try {
-            const wifiName = await getWifiName();
-            if (wifiName.includes('NOKOV')) {
-              db.update({ key: 'access_code' }, { $set: { value: '11161219' } }, {}, (err) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve(true);
-                }
-              });
-            } else {
-              resolve(false);
-            }
-          } catch (err) {
-            console.error(err);
-            resolve(false);
-          }
-        }
+        return false;
       }
-    });
-  });
+    }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 }
 
 function createWindow() {
@@ -56,12 +44,10 @@ function createWindow() {
         autoHideMenuBar: true
       });
       redirectWindow.loadURL('https://chat.minorcaster.com/access_denied');
-      redirectWindow.setMenuBarVisibility(false);    
+      redirectWindow.setMenuBarVisibility(false); 
       return;
     }
-
     if (mainWindow) return;
-
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
@@ -72,18 +58,14 @@ function createWindow() {
       },
       autoHideMenuBar: true
     });
-
     mainWindow.on('closed', () => {
       mainWindow = null;
     });
-
     const defaultUserAgent = mainWindow.webContents.userAgent;
     const customUserAgent = `${defaultUserAgent} NOKOV`;
     mainWindow.webContents.userAgent = customUserAgent;
-
     mainWindow.loadURL('https://chat.minorcaster.com/');
     mainWindow.setMenuBarVisibility(false);
-
     mainWindow.webContents.on('did-finish-load', () => {
       if (splash) {
         splash.close();
@@ -107,7 +89,6 @@ function showSplashScreen() {
       contextIsolation: true
     }
   });
-
   splash.loadURL(`file://${__dirname}/splash.html`);
   return splash;
 }

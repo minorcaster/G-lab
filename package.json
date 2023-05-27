@@ -43,12 +43,15 @@
     "electron-builder": "^23.6.0"
   },
   "dependencies": {
+    "@seald-io/binary-search-tree": "^1.0.3",
+    "@seald-io/nedb": "^4.0.2",
     "async": "^3.2.4",
     "binary-search-tree": "^0.2.6",
     "esm": "^3.2.25",
     "execa": "^7.1.1",
     "mkdirp": "^3.0.1",
     "nedb": "latest",
+    "nedb-promises": "^6.2.1",
     "underscore": "^1.13.6",
     "wifi-name": "^3.1.1"
   }
