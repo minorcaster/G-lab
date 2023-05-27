@@ -47,6 +47,7 @@
     "@seald-io/nedb": "^4.0.2",
     "async": "^3.2.4",
     "binary-search-tree": "^0.2.6",
+    "electron-log": "^4.4.8",
     "esm": "^3.2.25",
     "execa": "^7.1.1",
     "mkdirp": "^3.0.1",

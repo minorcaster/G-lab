@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const Datastore = require('nedb-promises');
 const path = require('path');
 const getWifiName = require('./wifiName');
+const log = require('electron-log');
 
 const db = Datastore.create({
   filename: path.join(app.getPath('userData'), 'appData.db'),
@@ -14,22 +15,27 @@ let splash = null;
 async function checkAccess() {
   try {
     const doc = await db.findOne({ key: 'access_code' });
+    log.info('Database access_code:', doc ? doc.value : 'Not found'); // Debug line
     if (doc && doc.value === '11161219') {
+      log.info('Access granted based on database'); // Debug line
       return true;
     } else {
       const wifiContainsNokov = await getWifiName();
       if (wifiContainsNokov) {
-        await db.update({ key: 'access_code' }, { $set: { value: '11161219' } }, {});
+        await db.update({ key: 'access_code' }, { key: 'access_code', value: '11161219' }, { upsert: true });
+        log.info('Access granted based on WiFi name'); // Debug line
         return true;
       } else {
+        log.info('Access denied'); // Debug line
         return false;
       }
     }
   } catch (err) {
-    console.error(err);
+    log.error(err);
     return false;
   }
 }
+
 
 
 function createWindow() {
