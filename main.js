@@ -36,8 +36,6 @@ async function checkAccess() {
   }
 }
 
-
-
 function createWindow() {
   checkAccess().then((access) => {
     if (!access) {
@@ -52,6 +50,9 @@ function createWindow() {
       });
       redirectWindow.loadURL('https://chat.minorcaster.com/access_denied');
       redirectWindow.setMenuBarVisibility(false); 
+      redirectWindow.on('closed', () => {
+        app.quit(); 
+      });
       return;
     }
     if (mainWindow) return;
@@ -68,7 +69,7 @@ function createWindow() {
     mainWindow.on('closed', () => {
       mainWindow = null;
       app.quit(); // Quit the application when the main window is closed
-    });    
+    }); 
     const defaultUserAgent = mainWindow.webContents.userAgent;
     const customUserAgent = `${defaultUserAgent} NOKOV`;
     mainWindow.webContents.userAgent = customUserAgent;
@@ -81,7 +82,7 @@ function createWindow() {
         }
         mainWindow.show();
       }, 1500); // Delay for 1.5 seconds
-    });    
+    }); 
   }).catch((err) => {
     console.error('Error checking access:', err);
   });
