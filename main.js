@@ -67,18 +67,21 @@ function createWindow() {
     });
     mainWindow.on('closed', () => {
       mainWindow = null;
-    });
+      app.quit(); // Quit the application when the main window is closed
+    });    
     const defaultUserAgent = mainWindow.webContents.userAgent;
     const customUserAgent = `${defaultUserAgent} NOKOV`;
     mainWindow.webContents.userAgent = customUserAgent;
     mainWindow.loadURL('https://chat.minorcaster.com/');
     mainWindow.setMenuBarVisibility(false);
     mainWindow.webContents.on('did-finish-load', () => {
-      if (splash) {
-        splash.close();
-      }
-      mainWindow.show();
-    });
+      setTimeout(() => {
+        if (splash) {
+          splash.close();
+        }
+        mainWindow.show();
+      }, 1500); // Delay for 1.5 seconds
+    });    
   }).catch((err) => {
     console.error('Error checking access:', err);
   });
