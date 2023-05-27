@@ -51,7 +51,14 @@ function createWindow() {
       redirectWindow.loadURL('https://chat.minorcaster.com/access_denied');
       redirectWindow.setMenuBarVisibility(false); 
       redirectWindow.on('closed', () => {
-        app.quit(); 
+        app.quit(); // Quit the application when the redirectWindow is closed
+      });
+      redirectWindow.webContents.on('did-finish-load', () => {
+        setTimeout(() => {
+          if (splash) {
+            splash.close();
+          }
+        }, 1500); // Delay for 1.5 seconds
       });
       return;
     }

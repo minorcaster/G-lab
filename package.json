@@ -17,7 +17,8 @@
       "main.js",
       "package.json",
       "icons/*",
-      "wifiName.js"
+      "wifiName.js",
+      "splash.html"
     ],
     "win": {
       "icon": "icons/nokov-gpt-portrait.ico"
