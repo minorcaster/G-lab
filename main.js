@@ -17,8 +17,8 @@ async function checkAccess() {
     if (doc && doc.value === '11161219') {
       return true;
     } else {
-      const wifiName = await getWifiName();
-      if (wifiName.includes('NOKOV')) {
+      const wifiContainsNokov = await getWifiName();
+      if (wifiContainsNokov) {
         await db.update({ key: 'access_code' }, { $set: { value: '11161219' } }, {});
         return true;
       } else {
@@ -30,6 +30,7 @@ async function checkAccess() {
     return false;
   }
 }
+
 
 function createWindow() {
   checkAccess().then((access) => {
